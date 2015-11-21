@@ -2,8 +2,8 @@
 ;;;
 ;;; color.lisp --- Color class.
 ;;;
-;;; Time-stamp: <Saturday Nov 21, 2015 05:45:31 asmodai>
-;;; Revision:   17
+;;; Time-stamp: <Saturday Nov 21, 2015 07:47:27 asmodai>
+;;; Revision:   19
 ;;;
 ;;; Copyright (c) 2015 Paul Ward <asmodai@gmail.com>
 ;;; Copyright (C) 2004-2005  Matthieu Villeneuve (matthieu.villeneuve@free.fr)
@@ -65,22 +65,22 @@
   ((red-value
     :initarg :red
     :initform 0
-    :type (single-float 0.0 1.0)
+    :type (or (integer 0 255) (single-float 0.0 1.0)) 
     :accessor color-red-value)
    (green-value
     :initarg :green
     :initform 0
-    :type (single-float 0.0 1.0)
+    :type (or (integer 0 255) (single-float 0.0 1.0)) 
     :accessor color-green-value)
    (blue-value
     :initarg :blue
     :initform 0
-    :type (single-float 0.0 1.0)
+    :type (or (integer 0 255) (single-float 0.0 1.0)) 
     :accessor color-blue-value)
    (alpha-value
     :initarg :alpha
     :initform +opaque+
-    :type (single-float 0.0 1.0)
+    :type (or (integer 0 255) (single-float 0.0 1.0)) 
     :accessor color-alpha-value)))
 
 (defmethod print-object ((object color) stream)
@@ -199,18 +199,5 @@
 
 (defvar +transparent-color+ (make-color-rgb 0.0 0.0 0.0 +transparent+))
 (defvar +opaque-color+      (make-color-rgb 0.0 0.0 0.0 +opaque+))
-
-(defvar +white+   (make-color-rgb 1.0 1.0 1.0))
-(defvar +black+   (make-color-rgb 0.0 0.0 0.0))
-(defvar +red+     (make-color-rgb 1.0 0.0 0.0))
-(defvar +green+   (make-color-rgb 0.0 1.0 0.0))
-(defvar +blue+    (make-color-rgb 0.0 0.0 1.0))
-(defvar +cyan+    (make-color-rgb 0.0 1.0 1.0))
-(defvar +magenta+ (make-color-rgb 1.0 0.0 1.0))
-(defvar +yellow+  (make-color-rgb 1.0 1.0 0.0))
-
-(defvar +dim-gray+   (make-color-grayscale 0.329))
-(defvar +gray+       (make-color-grayscale 0.5))
-(defvar +light-gray+ (make-color-grayscale 0.659))
 
 ;;; color.lisp ends here

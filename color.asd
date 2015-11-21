@@ -2,8 +2,8 @@
 ;;;
 ;;; color.asd --- Color system definition.
 ;;;
-;;; Time-stamp: <Saturday Nov 21, 2015 06:22:09 asmodai>
-;;; Revision:   1
+;;; Time-stamp: <Saturday Nov 21, 2015 07:48:10 asmodai>
+;;; Revision:   2
 ;;;
 ;;; Copyright (c) 2015 Paul Ward <asmodai@gmail.com>
 ;;;
@@ -68,6 +68,9 @@ This is only for Common Lisp systems that support ASDF.")
                (:file "color-utils" :depends-on ("package"))
                (:file "color" :depends-on ("color-utils"
                                            "package"))
+               (:file "rgb" :depends-on ("color"
+                                         "color-utils"
+                                         "package"))
                (:file "operations" :depends-on ("color"
                                                 "color-utils"
                                                 "package"))
