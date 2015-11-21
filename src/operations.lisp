@@ -2,8 +2,8 @@
 ;;;
 ;;; operations.lisp --- Color operations.
 ;;;
-;;; Time-stamp: <Saturday Nov 21, 2015 06:16:06 asmodai>
-;;; Revision:   12
+;;; Time-stamp: <Saturday Nov 21, 2015 07:16:10 asmodai>
+;;; Revision:   13
 ;;;
 ;;; Copyright (c) 2015 Paul Ward <asmodai@gmail.com>
 ;;;
@@ -57,18 +57,18 @@
 
 (defgeneric color-gradient (start stop steps)
   (:method ((start color) (stop color) steps)
-    (multiple-value-bind (r1 g1 b1)
-        (color-rgb start)
-      (multiple-value-bind (r2 g2 b2)
-          (color-rgb stop)
-        (let* ((rs (/ (- r2 r1) (1+ steps)))
-               (gs (/ (- g2 g1) (1+ steps)))
-               (bs (/ (- b2 b1) (1+ steps)))
-               result)
-          (dotimes (_ steps)
-            (push (list (make-color-rgb (+ r1 rs) (+ g1 gs) (+ b1 bs))) result))
+    (let (result)
+      (multiple-value-bind (r1 g1 b1)
+          (color-rgb start)
+        (multiple-value-bind (r2 g2 b2)
+            (color-rgb stop)
+          (dotimes (step steps)
+            (let* ((rs (/ (- r2 r1) (1+ step)))
+                   (gs (/ (- g2 g1) (1+ step)))
+                   (bs (/ (- b2 b1) (1+ step))))
+              (push (list (make-color-rgb (+ r1 rs) (+ g1 gs) (+ b1 bs))) result)))
           (nreverse result))))))
-
+ 
 (defgeneric color-saturate (color percent)
   (:method ((color color) percent)
     (multiple-value-bind (r g b)

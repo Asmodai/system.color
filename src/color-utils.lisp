@@ -97,18 +97,6 @@
          (hue->rgb m1 m2 h)
          (hue->rgb m1 m2 (mod (- h (/ 3.0)) 1))))))
 
-(defun hsl->rgb (h s l)
-  (if (= s 0.0)
-      (values l l l)
-      (let* ((m2 (if (<= l 0.5)
-                     (* l (+ 1.0 s))
-                     (- (+ l s) (* l s))))
-             (m1 (- (* 2.0 l) m2)))
-        (values
-         (hue->rgb m1 m2 (mod (+ h (/ 3.0)) 1))
-         (hue->rgb m1 m2 h)
-         (hue->rgb m1 m2 (mod (- h (/ 3.0)) 1))))))
-
 (defun rgb->ihs (r g b)
   (let* ((red (float r 1.0d0))
          (green (float g 1.0d0))
