@@ -2,8 +2,8 @@
 ;;;
 ;;; operations.lisp --- Color operations.
 ;;;
-;;; Time-stamp: <Saturday Nov 21, 2015 07:16:10 asmodai>
-;;; Revision:   13
+;;; Time-stamp: <Saturday Nov 21, 2015 08:26:56 asmodai>
+;;; Revision:   14
 ;;;
 ;;; Copyright (c) 2015 Paul Ward <asmodai@gmail.com>
 ;;;
@@ -50,12 +50,15 @@
                    (debug 0)))
 
 (defgeneric color-complement (color)
+  (:documentation "Returns the complement for a given colour.")
   (:method ((color color))
     (make-color-rgb (color-clamp (- (color-red-value color) 1.0))
                     (color-clamp (- (color-green-value color) 1.0))
                     (color-clamp (- (color-blue-value color) 1.0)))))
 
 (defgeneric color-gradient (start stop steps)
+  (:documentation "Generate a gradient with STEPS steps starting with
+  colour START and ending with colour STOP.")
   (:method ((start color) (stop color) steps)
     (let (result)
       (multiple-value-bind (r1 g1 b1)
@@ -70,6 +73,7 @@
           (nreverse result))))))
  
 (defgeneric color-saturate (color percent)
+  (:documentation "Saturate a colour by a given percentage")
   (:method ((color color) percent)
     (multiple-value-bind (r g b)
         (color-rgb color)
@@ -81,10 +85,12 @@
             (make-color-rgb r g b)))))))
 
 (defgeneric color-desaturate (color percent)
+  (:documentation "Desaturate a colour by a given percentage.")
   (:method ((color color) percent)
     (color-saturate color (- percent))))
 
 (defgeneric color-lighten (color percent)
+  (:documentation "Lighten a colour by a given percentage.")
   (:method ((color color) percent)
     (multiple-value-bind (r g b)
         (color-rgb color)
@@ -96,6 +102,7 @@
             (make-color-rgb r g b)))))))
 
 (defgeneric color-darken (color percent)
+  (:documentation "Darken a colour by a given percentage.")
   (:method ((color color) percent)
     (color-lighten color (- percent))))
 
@@ -105,6 +112,8 @@
     (* x x)))
 
 (defgeneric color-distance (lhs rhs)
+  (:documentation "Return the Euclidean disstance between two
+  colours.")
   (:method ((lhs color) (rhs color))
     (multiple-value-bind (r1 g1 b1)
         (color-rgb lhs)
@@ -128,6 +137,8 @@
   (not (equal-p lhs rhs)))
 
 (defgeneric color-blend (lhs rhs)
+  (:documentation "Blend two colours into each other.  This handles
+  alpha blending, so be careful.")
   (:method ((lhs color) (rhs color))
     (multiple-value-bind (r1 g1 b1 a1)
         (color-rgba lhs)
@@ -157,6 +168,8 @@
                       (color-clamp (/ (- b1 b2) 2.0))))))
 
 (defgeneric color-triad (color)
+  (:documentation "Return the colours that are triads of the given
+  colour.")
   (:method ((color color))
     (multiple-value-bind (r g b)
         (color-rgb color)
@@ -164,6 +177,8 @@
             (make-color-rgb g b r)))))
 
 (defgeneric color-tetriad (color)
+  (:documentation "Return the colours that are tetriads of the given
+  colour.")
   (:method ((color color))
     (multiple-value-bind (r g b)
         (color-rgb color)

@@ -2,8 +2,8 @@
 ;;;
 ;;; color-utils.lisp --- Some utilities.
 ;;;
-;;; Time-stamp: <Saturday Nov 21, 2015 05:42:01 asmodai>
-;;; Revision:   9
+;;; Time-stamp: <Saturday Nov 21, 2015 08:23:10 asmodai>
+;;; Revision:   10
 ;;;
 ;;; Copyright (c) 2015 Paul Ward <asmodai@gmail.com>
 ;;;
@@ -48,11 +48,12 @@
                    (safety 0)
                    (debug 0)))
 
-(defconstant *ihs-rgb-c1* (float (sqrt (/ 1.0 6.0)) 1.0d0))
-(defconstant *ihs-rgb-c2* (float (sqrt (/ 1.0 2.0)) 1.0d0))
-(defconstant *ihs-rgb-c3* (float (sqrt (/ 1.0 3.0)) 1.0d0))
+(defconstant +ihs-rgb-c1+ (float (sqrt (/ 1.0 6.0)) 1.0d0))
+(defconstant +ihs-rgb-c2+ (float (sqrt (/ 1.0 2.0)) 1.0d0))
+(defconstant +ihs-rgb-c3+ (float (sqrt (/ 1.0 3.0)) 1.0d0))
 
 (defun hue->rgb (v1 v2 h)
+  "Convert a hue to its corresponding value in the RGB colour space."
   (cond ((< h (/ 6.0))
          (+ v1 (* (- v2 v1) h 6.0)))
         ((< h 0.5)
@@ -63,6 +64,8 @@
          v1)))
 
 (defun rgb->hsl (r g b)
+  "Convert an RGB colour to its corresponding value in the HSL colour
+space."
   (let* ((max (max r g b))
          (min (min r g b))
          (delta (- max min))
@@ -86,6 +89,8 @@
           (values h s l)))))
 
 (defun hsl->rgb (h s l)
+  "Convert a HSL colour to its corresponding value in the RGB colour
+space."
   (if (= s 0.0)
       (values l l l)
       (let* ((m2 (if (<= l 0.5)
@@ -98,12 +103,14 @@
          (hue->rgb m1 m2 (mod (- h (/ 3.0)) 1))))))
 
 (defun rgb->ihs (r g b)
+  "Convert an RGB colour to its corresponding value in the IHS colour
+space."
   (let* ((red (float r 1.0d0))
          (green (float g 1.0d0))
          (blue (float b 1.0d0))
-         (x (* *ihs-rgb-c1* (- (+ red red) blue green)))
-         (y (* *ihs-rgb-c2* (- green blue)))
-         (z (* *ihs-rgb-c3* (+ red green blue)))
+         (x (* +ihs-rgb-c1+ (- (+ red red) blue green)))
+         (y (* +ihs-rgb-c2+ (- green blue)))
+         (z (* +ihs-rgb-c3+ (+ red green blue)))
          (q (+ (* x x) (* y y)))
          (i (sqrt (+ q (* z z)))))
     (declare (double-float red green blue x y z q i))
@@ -117,6 +124,8 @@
           (values i hue sat)))))
 
 (defun ihs->rgb (i h s)
+  "Convert an IHS colour to its corresponding value in the RGB colour
+space."
   (macrolet ((rgb-values (r g b)
                `(values (max 0.0 (min ,r 1.0))
                         (max 0.0 (min ,g 1.0))
@@ -126,28 +135,32 @@
            (s (float s 1.0d0))
            (hh (* h 2pi))
            (ss (sin s))
-           (x (* *ihs-rgb-c1* ss (cos hh) i))
-           (y (* *ihs-rgb-c2* ss (sin hh) i))
-           (z (* *ihs-rgb-c3* (cos s) i)))
+           (x (* +ihs-rgb-c1+ ss (cos hh) i))
+           (y (* +ihs-rgb-c2+ ss (sin hh) i))
+           (z (* +ihs-rgb-c3+ (cos s) i)))
       (declare (double-float i h s hh ss x y z))
       (rgb-values (+ x x z)
                   (+ y z ( - x))
                   (- z x y)))))
 
 (defsubst rgb->intensity (r g b)
+  "Return the intensity of an RGB colour."
   (sqrt (+ (* r r) (* g g) (* b b))))
 
 (defsubst rgb->grayscale/average (r g b)
+  "Convert an RGB colour to grayscale by averaging."
   (if (= r g b)
       r
       (/ (+ r g b) 3)))
 
 (defsubst rgb->grayscale/lightness (r g b)
+  "Convert an RGB colour to grayscale by its lightness."
   (if (= r g b)
       r
       (/ (+ (max r g b) (min r g b)) 2)))
 
 (defsubst rgb->grayscale/luminosity (r g b)
+  "Convert an RGB colour to grayscale by its luminosity"
   (if (= r g b)
       r
       (+ (* 0.21 r) (* 0.72 g) (* 0.07 b))))
@@ -163,10 +176,21 @@
    (declare (type float r g b))
    (rgb->grayscale/luminosity r g b)))
 
+(define-documentation 'rgb->grayscale 'function
+  "Converts an RGB colour to a grayscale colour using one of three
+different algorithms:
+
+:AVERAGE     Convert by averaging the RGB's values.
+:LIGHTNESS   Convert using the RGB colour's lightness.
+:LUMINOSITY  Convert using the RGB colour's luminosity.")
+
 (defsubst color-clamp (value)
+  "Clamp a value to the range 0.0..0.1."
   (min 1.0 (max 0.0 value)))
 
 (defsubst rgb-float->byte (value)
+  "Convert an RGB floating-point value to a byte in the range of
+0..255."
   (if (<= value 1.0)
       (let ((v (max 0.0 (min 1.0 value))))
         (floor (if (= v 1.0)
@@ -175,12 +199,12 @@
       value))
 
 (defsubst rgb-byte->float (value)
+  "Convert an RGB byte value to a floating-point number in the range
+of 0.0..0.1."
   (if (> value 1.0)
       (if (= value 255)
           1.0
           (/ value 256.0))
       value))
-
-
 
 ;;; color-utils.lisp ends here

@@ -2,8 +2,8 @@
 ;;;
 ;;; rgb.lisp --- X11 RGB values.
 ;;;
-;;; Time-stamp: <Saturday Nov 21, 2015 07:51:21 asmodai>
-;;; Revision:   5
+;;; Time-stamp: <Saturday Nov 21, 2015 08:29:42 asmodai>
+;;; Revision:   6
 ;;;
 ;;; Copyright (c) 2015 Paul Ward <asmodai@gmail.com>
 ;;;
@@ -43,6 +43,11 @@
 
 ;; (defvar +color+ (make-color-rgb x y z)
 (defmacro define-color (&body options)
+  "Define a colour with the given options.
+
+:RGB name red green blue
+  generate a colour with the given name and RGB components.
+"
   (ecase (first options)
     (:rgb
      (let ((cname (intern (concatenate
@@ -55,7 +60,6 @@
            (blue (fifth options)))
        `(progn (defvar ,cname (make-color-rgb ,red ,green ,blue))
                (export ',cname))))))
-
 
 (define-color :rgb snow 255 250 250)
 (define-color :rgb ghostwhite 248 248 255)

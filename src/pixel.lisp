@@ -2,8 +2,8 @@
 ;;;
 ;;; pixel.lisp --- Pixel operations.
 ;;;
-;;; Time-stamp: <Saturday Nov 21, 2015 06:17:06 asmodai>
-;;; Revision:   4
+;;; Time-stamp: <Saturday Nov 21, 2015 08:28:45 asmodai>
+;;; Revision:   5
 ;;;
 ;;; Copyright (c) 2015 Paul Ward <asmodai@gmail.com>
 ;;;
@@ -58,6 +58,7 @@
   `(or rgb-pixel grayscale-pixel))
 
 (defgeneric color->argb/pixel (color)
+  (:documentation "Convert a colour to an ARGB pixel value.")
   (:method ((color color))
     (with-slots (red-value green-value blue-value alpha-value) color
        (the rgb-pixel (logior (ash (rgb-float->byte alpha-value) 24)
@@ -66,6 +67,7 @@
                               (rgb-float->byte blue-value))))))
 
 (defgeneric color->rgba/pixel (color)
+  (:documentation "Convert a colour to an RGBA pixel value.")
   (:method ((color color))
     (with-slots (red-value green-value blue-value alpha-value) color
        (the rgb-pixel (logior (ash (rgb-float->byte red-value) 24)
@@ -74,6 +76,7 @@
                               (rgb-float->byte alpha-value))))))
 
 (defgeneric color->grayscale/pixel (color)
+  (:documentation "Converta colour to a grayscale pixel value.")
   (:method ((color color))
     (let ((a (rgb-float->byte (color-alpha-value color)))
           (i (rgb-float->byte (color-intensity color)))) 
@@ -89,6 +92,9 @@
                     (rgb-byte->float b)
                     (rgb-byte->float a))))
 
+(define-documentation 'argb/pixel->color 'function
+  "Convert an ARGB pixel value into a colour.")
+
 (defsubst rgba/pixel->color (pixel)
   (let ((r (the (unsigned-byte 8) (ldb (byte 8 24) pixel)))
         (g (the (unsigned-byte 8) (ldb (byte 8 16) pixel)))
@@ -99,10 +105,16 @@
                       (rgb-byte->float b)
                       (rgb-byte->float a))))
 
+(define-documentation 'rgba/pixel->color 'function
+  "Convert an RGBA pixel value into a colour.")
+
 (defsubst grayscale/pixel->color (pixel)
   (let ((a (the (unsigned-byte 8) (ldb (byte 8 8) pixel)))
         (i (the (unsigned-byte 8) (ldb (byte 8 0) pixel))))
     (make-color-grayscale (rgb-byte->float i)
                      (rgb-byte->float a))))
+
+(define-documentation 'grayscale/pixel->color 'function
+  "Convert a grayscale pixel value into a colour.")
 
 ;;; pixel.lisp ends here
