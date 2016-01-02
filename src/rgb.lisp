@@ -2,8 +2,8 @@
 ;;;
 ;;; rgb.lisp --- X11 RGB values.
 ;;;
-;;; Time-stamp: <Saturday Nov 21, 2015 08:29:42 asmodai>
-;;; Revision:   6
+;;; Time-stamp: <Saturday Jan  2, 2016 21:29:56 asmodai>
+;;; Revision:   9
 ;;;
 ;;; Copyright (c) 2015 Paul Ward <asmodai@gmail.com>
 ;;;
@@ -40,6 +40,15 @@
 
 #-genera
 (in-package #:system.color)
+
+;(when (fboundp 'make-color-rgb)
+(defconstant +transparent-color+
+  (make-color-rgb 0.0 0.0 0.0 +transparent-alpha+)
+  "Pure transparent colour.")
+    
+(defconstant +opaque-color+
+  (make-color-rgb 0.0 0.0 0.0 +opaque-alpha+)
+  "Pure opaque colour.")
 
 ;; (defvar +color+ (make-color-rgb x y z)
 (defmacro define-color (&body options)

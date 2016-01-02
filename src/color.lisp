@@ -2,8 +2,8 @@
 ;;;
 ;;; color.lisp --- Color class.
 ;;;
-;;; Time-stamp: <Saturday Nov 21, 2015 08:17:38 asmodai>
-;;; Revision:   21
+;;; Time-stamp: <Saturday Jan  2, 2016 21:31:10 asmodai>
+;;; Revision:   24
 ;;;
 ;;; Copyright (c) 2015 Paul Ward <asmodai@gmail.com>
 ;;; Copyright (C) 2004-2005  Matthieu Villeneuve (matthieu.villeneuve@free.fr)
@@ -49,41 +49,36 @@
                    (safety 0)
                    (debug 0)))
 
-(defconstant +foreground+ :foreground
-  "Foreground ink.")
+(defconstant +opaque-alpha+ 1.0
+  "Fully opaque alpha value.")
 
-(defconstant +background+ :background
-  "Background ink.")
-
-(defconstant +flipping-ink+ :flipping-ink
-  "Exchange forground and background inks.")
-
-(defconstant +opaque+ 1.0
-  "Fully opaque ink.")
-
-(defconstant +transparent+ 0.0
-  "Fully transparent ink")
+(defconstant +transparent-alpha+ 0.0
+  "Fully transparent alpha value.")
 
 (defclass color ()
   ((red-value
     :initarg :red
     :initform 0
-    :type (or (integer 0 255) (single-float 0.0 1.0))
+    :type (or (integer 0 255)
+              (single-float 0.0 1.0))
     :documentation "Red component of the colour.")
    (green-value
     :initarg :green
     :initform 0
-    :type (or (integer 0 255) (single-float 0.0 1.0))
+    :type (or (integer 0 255)
+              (single-float 0.0 1.0))
     :documentation "Green component of the colour.")
    (blue-value
     :initarg :blue
     :initform 0
-    :type (or (integer 0 255) (single-float 0.0 1.0))
+    :type (or (integer 0 255)
+              (single-float 0.0 1.0))
     :documentation "Blue component of the colour.")
    (alpha-value
     :initarg :alpha
-    :initform +opaque+
-    :type (or (integer 0 255) (single-float 0.0 1.0))
+    :initform +opaque-alpha+
+    :type (or (integer 0 255)
+              (single-float 0.0 1.0))
     :documentation "Alpha component of the colour."))
   (:documentation "This class represents an RGBA colour."))
 
@@ -145,7 +140,7 @@
   (:method (new-value (color color))
     (setf (slot-value color 'alpha-value) (rgb-byte->float new-value))))
 
-(defsubst make-color-rgb (red green blue &optional (alpha +opaque+))
+(defsubst make-color-rgb (red green blue &optional (alpha +opaque-alpha+))
   (make-instance 'color
      :red red
      :green green
@@ -156,7 +151,7 @@
   "Create an RGB colour with the given red, green, and blue components.  The
 alpha component is optional, and defaults to fully opaque.")
 
-(defsubst make-color-grayscale (intensity &optional (alpha +opaque+))
+(defsubst make-color-grayscale (intensity &optional (alpha +opaque-alpha+))
   (make-instance 'color
      :red intensity
      :green intensity
@@ -260,11 +255,5 @@ is optional and defaults to fully opaque.")
                (rgb-float->byte green-value)
                (rgb-float->byte blue-value)
                alpha-value))))
-
-(defconstant +transparent-color+ (make-color-rgb 0.0 0.0 0.0 +transparent+)
-  "Pure transparent colour.")
-
-(defconstant +opaque-color+ (make-color-rgb 0.0 0.0 0.0 +opaque+)
-  "Pure opaque colour.")
 
 ;;; color.lisp ends here

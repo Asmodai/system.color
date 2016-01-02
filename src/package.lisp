@@ -2,8 +2,8 @@
 ;;;
 ;;; package.lisp --- Color system package.
 ;;;
-;;; Time-stamp: <Saturday Nov 21, 2015 06:20:23 asmodai>
-;;; Revision:   8
+;;; Time-stamp: <Saturday Jan  2, 2016 21:20:11 asmodai>
+;;; Revision:   13
 ;;;
 ;;; Copyright (c) 2015 Paul Ward <asmodai@gmail.com>
 ;;;
@@ -43,10 +43,15 @@
 
 (defpackage #:system.color
   (:use #:common-lisp
-        #:cold.zetalisp
-        #:cold.clos
-        #:cold.mop
-        #:cold.excl)
+        #:core.zetalisp
+        #:core.clos
+        #:core.mop
+        #:core.excl)
+  (:shadowing-import-from #:core.mop #:standard-method
+                                     #:standard-generic-function
+                                     #:defmethod
+                                     #:defgeneric
+                                     #:standard-class)
   (:export #:rgb->hsl
            #:hsl->rgb
            #:rgb->ihs

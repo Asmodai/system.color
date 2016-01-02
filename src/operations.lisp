@@ -2,8 +2,8 @@
 ;;;
 ;;; operations.lisp --- Color operations.
 ;;;
-;;; Time-stamp: <Saturday Nov 21, 2015 08:26:56 asmodai>
-;;; Revision:   14
+;;; Time-stamp: <Saturday Jan  2, 2016 21:32:58 asmodai>
+;;; Revision:   15
 ;;;
 ;;; Copyright (c) 2015 Paul Ward <asmodai@gmail.com>
 ;;;
@@ -48,6 +48,12 @@
  #-debug (optimize (speed 3)
                    (safety 0)
                    (debug 0)))
+
+;; XXX These will be put elsewhere.
+(defgeneric equal-p (lhs rhs))
+(defgeneric nequal-p (lhs rhs))
+(defgeneric add (lhs rhs))
+(defgeneric subtract (lhs rhs))
 
 (defgeneric color-complement (color)
   (:documentation "Returns the complement for a given colour.")

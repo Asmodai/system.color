@@ -2,8 +2,8 @@
 ;;;
 ;;; color.asd --- Color system definition.
 ;;;
-;;; Time-stamp: <Saturday Nov 21, 2015 07:48:10 asmodai>
-;;; Revision:   2
+;;; Time-stamp: <Saturday Jan  2, 2016 21:13:38 asmodai>
+;;; Revision:   3
 ;;;
 ;;; Copyright (c) 2015 Paul Ward <asmodai@gmail.com>
 ;;;
@@ -59,7 +59,7 @@ This is only for Common Lisp systems that support ASDF.")
     :description "<fill this in>"
     :long-description "<fill this in>"
 
-    :depends-on (cold)
+    :depends-on (core)
 
     :components
     ((:module :src
